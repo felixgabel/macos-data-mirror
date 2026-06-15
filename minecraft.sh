@@ -5,14 +5,14 @@ RSYNC="/opt/homebrew/bin/rsync"
 TARGET_DIR="/Volumes/Externe Festplatte/Backups/Minecraft"
 SOURCE_DIR="$HOME/Library/Application Support/minecraft"
 SOURCES=(
-    config
-    instances
-    mods
-    resourcepacks
-    saves
-    screenshots
-    shaderpacks
-    options.txt
+    "$SOURCE_DIR"/config
+    "$SOURCE_DIR"/instances
+    "$SOURCE_DIR"/mods
+    "$SOURCE_DIR"/resourcepacks
+    "$SOURCE_DIR"/saves
+    "$SOURCE_DIR"/screenshots
+    "$SOURCE_DIR"/shaderpacks
+    "$SOURCE_DIR"/options.txt
 )
 
 if [ ! -d "$TARGET_DIR" ]; then
@@ -25,18 +25,9 @@ if [ ! -d "$SOURCE_DIR" ]; then
   exit 1
 fi
 
-EXISTING_SOURCE=()
-for SOURCE in "${SOURCES[@]}"; do
-    if [ -e "$SOURCE_DIR/$SOURCE" ]; then
-        EXISTING_SOURCE+=("$SOURCE_DIR/$SOURCE")
-    else
-        echo "Achtung! '$SOURCE' nicht gefunden, überspringe..."
-    fi
-done
-
 echo
 echo "Starte Backup-Prozess..."
 echo
-"$RSYNC" -avP --delete "${EXISTING_SOURCE[@]}" "$TARGET_DIR/"
+"$RSYNC" -avP --delete --ignore-missing-args "${SOURCES[@]}" "$TARGET_DIR/"
 echo
 echo "Backup erfolgreich abgeschlossen."
