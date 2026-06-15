@@ -2,8 +2,8 @@
 set -euo pipefail
 
 RSYNC="/opt/homebrew/bin/rsync"
-TARGET_DIR="/Volumes/Externe Festplatte/Backups/Mediathek"
-SOURCE="$HOME/Mediathek/Musik"
+TARGET_DIR="/Volumes/Externe Festplatte/Backups/Musik/Mediathek"
+SOURCE="$HOME/Mediathek/Musik/"
 
 if [ ! -d "$TARGET_DIR" ]; then
   echo "Fehler: Zielordner '$TARGET_DIR' nicht gefunden. Festplatte angeschlossen?"
@@ -18,6 +18,6 @@ fi
 echo
 echo "Starte Backup-Prozess..."
 echo
-"$RSYNC" -avP --delete "$SOURCE" "$TARGET_DIR/"
+"$RSYNC" -avP --delete --dry-run "$SOURCE" "$TARGET_DIR/"
 echo
 echo "Backup erfolgreich abgeschlossen."

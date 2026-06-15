@@ -2,8 +2,8 @@
 set -euo pipefail
 
 RSYNC="/opt/homebrew/bin/rsync"
-TARGET_DIR="/Volumes/Externe Festplatte/Backups"
-SOURCE="$HOME/Musik"
+TARGET_DIR="/Volumes/Externe Festplatte/Backups/Musik/Produktion"
+SOURCE="$HOME/Musik/"
 
 if [ ! -d "$TARGET_DIR" ]; then
   echo "Fehler: Zielordner '$TARGET_DIR' nicht gefunden. Festplatte angeschlossen?"
