@@ -15,9 +15,16 @@ if [ ! -d "$SOURCE" ]; then
   exit 1
 fi
 
+ARGS=(
+  -av
+  --exclude=".DS_Store"
+  --exclude=".localized"
+  --delete
+)
+
 echo
 echo "Starte Backup-Prozess..."
 echo
-"$RSYNC" -avP --delete --dry-run "$SOURCE" "$TARGET_DIR/"
+"$RSYNC" "${ARGS[@]}" "$SOURCE" "$TARGET_DIR/"
 echo
 echo "Backup erfolgreich abgeschlossen."

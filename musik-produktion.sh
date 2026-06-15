@@ -3,7 +3,7 @@ set -euo pipefail
 
 RSYNC="/opt/homebrew/bin/rsync"
 TARGET_DIR="/Volumes/Externe Festplatte/Backups/Musik/Produktion"
-SOURCE="$HOME/Musik/"
+SOURCE="$HOME/Music/"
 
 if [ ! -d "$TARGET_DIR" ]; then
   echo "Fehler: Zielordner '$TARGET_DIR' nicht gefunden. Festplatte angeschlossen?"
@@ -15,9 +15,17 @@ if [ ! -d "$SOURCE" ]; then
   exit 1
 fi
 
+ARGS=(
+  -av
+  --exclude=".DS_Store"
+  --exclude=".localized"
+  --exclude="Spitfire Audio/Settings/App/Helper/"
+  --delete
+)
+
 echo
 echo "Starte Backup-Prozess..."
 echo
-"$RSYNC" -avP --delete "$SOURCE" "$TARGET_DIR/"
+"$RSYNC" "${ARGS[@]}" "$SOURCE" "$TARGET_DIR/"
 echo
 echo "Backup erfolgreich abgeschlossen."
