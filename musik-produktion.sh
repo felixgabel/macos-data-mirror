@@ -6,7 +6,7 @@ TARGET_DIR="/Volumes/Externe Festplatte/Backups"
 SOURCE="$HOME/Musik"
 
 if [ ! -d "$TARGET_DIR" ]; then
-  echo "Fehler: Zielverzeichnis '$TARGET_DIR' nicht gefunden. Festplatte angeschlossen?"
+  echo "Fehler: Zielordner '$TARGET_DIR' nicht gefunden. Festplatte angeschlossen?"
   exit 1
 fi
 
@@ -17,6 +17,7 @@ fi
 
 echo
 echo "Starte Backup-Prozess..."
+echo
 "$RSYNC" -avP --delete "$SOURCE" "$TARGET_DIR/"
 echo
 echo "Backup erfolgreich abgeschlossen."
