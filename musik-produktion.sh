@@ -16,7 +16,7 @@ if [ ! -d "$SOURCE" ]; then
 fi
 
 ARGS=(
-  -av
+  -vaAXUNH
   --exclude=".DS_Store"
   --exclude=".localized"
   --exclude="Spitfire Audio/Settings/App/Helper/"

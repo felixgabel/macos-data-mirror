@@ -26,7 +26,7 @@ if [ ! -d "$SOURCE_DIR" ]; then
 fi
 
 ARGS=(
-  -av
+  -va
   --exclude=".DS_Store"
   --exclude=".localized"
   --delete
