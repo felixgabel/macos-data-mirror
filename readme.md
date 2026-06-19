@@ -1,6 +1,4 @@
-# ReadMe
-
-## Minecraft
+### Additional explanation for minecraft.sh
 
 On Mac, the important data to save for a minecraft backup are located in `~/Library/Application Support/minecraft/`
 
