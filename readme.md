@@ -13,6 +13,9 @@ minecraft/
   backup.sh
   restore.sh
 musik/
+  mainstage-app/
+    backup.sh
+    restore.sh
   mediathek/
     backup.sh
     restore.sh
@@ -73,3 +76,7 @@ Die musik-Skripte fügen `AXUNH` hinzu, um macOS-spezifische Metadaten noch grü
 Das minecraft-Skript nutzt nur `-va`, da Minecraft-Dateien nicht auf ACLs, erweiterte Attribute oder Erstellungsdaten angewiesen sind.
 
 Die minecraft-Skripte fügen außerdem `--ignore-missing-args` hinzu, da ihre `SOURCES`-/Restore-Liste mehrere optionale Unterordner enthält (z. B. `shaderpacks`, `instances`), die nicht jeder hat. Ohne dieses Flag würde rsync den gesamten Lauf abbrechen, sobald auch nur ein Eintrag fehlt. Die musik-Skripte sichern jeweils nur einen einzigen Ordner (dessen Existenz bereits zuvor im Skript geprüft wird), daher gibt es dort nichts Optionales zu ignorieren.
+
+### Sonderfall musik/mainstage-app
+
+Dieser Ordner sichert nicht rsync-basiert einen Ordner, sondern packt die gesamte App `/Applications/MainStage.app` mit `ditto` (statt `zip`) in ein Zip-Archiv, da `ditto` Resource Forks, erweiterte Attribute und die Codesignatur von `.app`-Bundles korrekt erhält. Der Zielordner auf der Festplatte heißt `MainStage.app`; jeder Lauf von `backup.sh` legt darin ein neues, nach Datum benanntes Archiv an (`YYYY_MM_DD.zip`), statt ein vorhandenes zu überschreiben — es bleibt also eine Historie mehrerer Backups erhalten. `restore.sh` zeigt eine nummerierte Liste aller gefundenen Archive (neuestes zuerst) an, aus der du das gewünschte auswählst, bevor es wiederhergestellt wird.

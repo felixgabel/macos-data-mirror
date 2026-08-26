@@ -13,6 +13,9 @@ minecraft/
   backup.sh
   restore.sh
 musik/
+  mainstage-app/
+    backup.sh
+    restore.sh
   mediathek/
     backup.sh
     restore.sh
@@ -73,3 +76,7 @@ The musik scripts add `AXUNH` for a more thorough preserve of macOS-specific fil
 The minecraft script uses plain `-va` since Minecraft's files don't rely on ACLs, extended attributes, or creation times.
 
 The minecraft scripts also add `--ignore-missing-args`, because their `SOURCES`/restore item list contains several optional subfolders (e.g. `shaderpacks`, `instances`) that not everyone has. Without it, rsync would fail the whole run if any single item is missing. The musik scripts back up one single folder each (already checked for existence earlier in the script), so there's nothing optional to ignore.
+
+### Special case: musik/mainstage-app
+
+This folder doesn't rsync-mirror a folder; instead it packs the whole `/Applications/MainStage.app` bundle into a zip archive using `ditto` (instead of `zip`), since `ditto` correctly preserves resource forks, extended attributes, and the code signature of `.app` bundles. The target folder on the drive is named `MainStage.app`; each run of `backup.sh` creates a new archive named after the date (`YYYY_MM_DD.zip`) inside it instead of overwriting an existing one, so a history of multiple backups is kept. `restore.sh` shows a numbered list of all archives found (newest first) so you can pick which one to restore.
