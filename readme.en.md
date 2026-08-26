@@ -1,4 +1,4 @@
-# Backup Script Collection
+# MacOS Data Mirror
 
 _[Deutsch](readme.md)_
 
