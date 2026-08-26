@@ -1,10 +1,12 @@
 # Backup Script Collection
 
-A collection of `rsync`-based backup and restore scripts for macOS, used to sync specific folders to and from an external drive.
+_[English](readme.en.md)_
 
-## Structure
+Eine Sammlung von `rsync`-basierten Backup- und Restore-Skripten für macOS, die bestimmte Ordner mit einer externen Festplatte synchronisieren.
 
-Each project has its own folder containing a `backup.sh` (local → drive) and a `restore.sh` (drive → local):
+## Struktur
+
+Jedes Projekt hat seinen eigenen Ordner mit einem `backup.sh` (lokal → Festplatte) und einem `restore.sh` (Festplatte → lokal):
 
 ```
 minecraft/
@@ -19,55 +21,55 @@ musik/
     restore.sh
 ```
 
-### What minecraft/backup.sh and minecraft/restore.sh cover
+### Was minecraft/backup.sh und minecraft/restore.sh sichern
 
-On Mac, the relevant Minecraft data lives under `~/Library/Application Support/minecraft/`:
+Auf dem Mac liegen die relevanten Minecraft-Daten unter `~/Library/Application Support/minecraft/`:
 
-| Path             | Contents                                              |
-| ---------------- | ----------------------------------------------------- |
-| `config/`        | Per-mod settings                                      |
-| `mods/`          | `.jar` mod files                                      |
-| `instances/`     | Individual instances (optional, only if you use them) |
-| `options.txt`    | Vanilla game settings (FOV, keybinds, etc.)           |
-| `resourcepacks/` | Texture/resource packs                                |
-| `saves/`         | Your worlds                                           |
-| `screenshots/`   | Screenshots (optional)                                |
-| `shaderpacks/`   | Shader files                                          |
+| Pfad             | Inhalt                                                 |
+| ---------------- | ------------------------------------------------------ |
+| `config/`        | Einstellungen pro Mod                                  |
+| `mods/`          | `.jar`-Mod-Dateien                                     |
+| `instances/`     | Einzelne Instanzen (optional, nur falls genutzt)       |
+| `options.txt`    | Vanilla-Spieleinstellungen (FOV, Tastenbelegung, etc.) |
+| `resourcepacks/` | Textur-/Ressourcenpakete                               |
+| `saves/`         | Eigene Welten                                          |
+| `screenshots/`   | Screenshots (optional)                                 |
+| `shaderpacks/`   | Shader-Dateien                                         |
 
-## Prerequisites
+## Voraussetzungen
 
-These scripts call rsync via a fixed path: `/opt/homebrew/bin/rsync` (Homebrew's rsync on Apple Silicon). macOS ships with an old built-in rsync that doesn't support all flags used here, so install a current version first:
+Diese Skripte rufen rsync über einen festen Pfad auf: `/opt/homebrew/bin/rsync` (Homebrews rsync auf Apple Silicon). macOS liefert standardmäßig ein altes rsync mit, das nicht alle hier verwendeten Flags unterstützt. Daher zuerst eine aktuelle Version installieren:
 
 ```
 brew install rsync
 ```
 
-## Usage
+## Verwendung
 
-1. Connect the external drive. All scripts expect it mounted at `/Volumes/Externe Festplatte/...` — if your drive has a different name, edit the `TARGET_DIR`/`BACKUP_DIR` variable at the top of the relevant script.
-2. Run the script you need, e.g.:
+1. Externe Festplatte anschließen. Alle Skripte erwarten sie unter `/Volumes/Externe Festplatte/...` — falls die Festplatte anders heißt, die Variable `TARGET_DIR`/`BACKUP_DIR` am Anfang des jeweiligen Skripts anpassen.
+2. Das gewünschte Skript ausführen, z. B.:
    ```
    ./minecraft/backup.sh
    ./minecraft/restore.sh
    ```
-3. **`backup.sh`** copies local files to the drive (and deletes files on the drive that no longer exist locally, to keep it a mirror).
-4. **`restore.sh`** copies files from the drive back to your local folder (without deleting local-only files) and will ask you to type `yes` before making any changes, since it can overwrite local data.
+3. **`backup.sh`** kopiert lokale Dateien auf die Festplatte (und löscht dort Dateien, die lokal nicht mehr existieren, um einen Spiegel zu erhalten).
+4. **`restore.sh`** kopiert Dateien von der Festplatte zurück in den lokalen Ordner (ohne lokale Dateien zu löschen) und fragt vor jeder Änderung nach Eingabe von `yes`, da lokale Daten überschrieben werden können.
 
-## `rsync` flags used in these scripts
+## In diesen Skripten verwendete `rsync`-Flags
 
-All scripts use `-va` (or `-vaAXUNH`) as their base rsync flags:
+Alle Skripte verwenden `-va` (oder `-vaAXUNH`) als Basis-Flags:
 
-- **`-v`** verbose, prints what rsync is doing
-- **`-a`** "archive" mode, a shortcut for `-rlptgoD` (recursive, preserve symlinks/permissions/timestamps/group/owner/device files)
+- **`-v`** verbose, zeigt an, was rsync gerade tut
+- **`-a`** "archive"-Modus, eine Abkürzung für `-rlptgoD` (rekursiv, erhält Symlinks/Berechtigungen/Zeitstempel/Gruppe/Besitzer/Gerätedateien)
 
-The musik scripts add `AXUNH` for a more thorough preserve of macOS-specific file metadata:
+Die musik-Skripte fügen `AXUNH` hinzu, um macOS-spezifische Metadaten noch gründlicher zu erhalten:
 
-- **`A`** preserve ACLs (Access Control Lists)
-- **`X`** preserve extended attributes (Finder tags, quarantine flags, app metadata)
-- **`U`** preserve atime (last-read timestamp)
-- **`N`** preserve crtime (creation date, separate from modified date on macOS)
-- **`H`** preserve hard links
+- **`A`** ACLs erhalten (Access Control Lists)
+- **`X`** erweiterte Attribute erhalten (Finder-Tags, Quarantäne-Flags, App-Metadaten)
+- **`U`** atime erhalten (Zeitpunkt des letzten Lesezugriffs)
+- **`N`** crtime erhalten (Erstellungsdatum, auf macOS getrennt vom Änderungsdatum)
+- **`H`** Hardlinks erhalten
 
-The minecraft script uses plain `-va` since Minecraft's files don't rely on ACLs, extended attributes, or creation times.
+Das minecraft-Skript nutzt nur `-va`, da Minecraft-Dateien nicht auf ACLs, erweiterte Attribute oder Erstellungsdaten angewiesen sind.
 
-The minecraft scripts also add `--ignore-missing-args`, because their `SOURCES`/restore item list contains several optional subfolders (e.g. `shaderpacks`, `instances`) that not everyone has. Without it, rsync would fail the whole run if any single item is missing. The musik scripts back up one single folder each (already checked for existence earlier in the script), so there's nothing optional to ignore.
+Die minecraft-Skripte fügen außerdem `--ignore-missing-args` hinzu, da ihre `SOURCES`-/Restore-Liste mehrere optionale Unterordner enthält (z. B. `shaderpacks`, `instances`), die nicht jeder hat. Ohne dieses Flag würde rsync den gesamten Lauf abbrechen, sobald auch nur ein Eintrag fehlt. Die musik-Skripte sichern jeweils nur einen einzigen Ordner (dessen Existenz bereits zuvor im Skript geprüft wird), daher gibt es dort nichts Optionales zu ignorieren.
