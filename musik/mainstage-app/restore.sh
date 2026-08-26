@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-BACKUP_DIR="/Volumes/Externe Festplatte/Backups/Musik/MainStage.app"
+BACKUP_DIR="/Volumes/Externe Festplatte/Backups/Musik/MainStage. app"
 TARGET="/Applications/MainStage.app"
 
 if [ ! -d "$BACKUP_DIR" ]; then
